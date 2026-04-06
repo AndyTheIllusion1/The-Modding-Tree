@@ -1,5 +1,6 @@
 let modInfo = {
 	name: "The Aspect Tree",
+	id: "aspects",
 	author: "AndyTheIllusion",
 	pointsName: "points",
 	modFiles: ["layers.js", "tree.js"],
@@ -17,9 +18,10 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v0.0.1</h3><br>
+		<h4>This is the start of me making shit</h4><br>
+		- Added a way to choose starting aspects.<br>
+		- Added the Time aspect`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -47,6 +49,8 @@ function getPointGen() {
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
+	startAspects: 0,
+	tUnlocked: [0,0,0,0,0,0,0,0,0,0,0,0]
 }}
 
 // Display extra things at the top of the page
