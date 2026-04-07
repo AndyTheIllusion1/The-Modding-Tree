@@ -21,7 +21,9 @@ let changelog = `<h1>Changelog:</h1><br>
 	<h3>v0.0.1</h3><br>
 		<h4>This is the start of me making shit</h4><br>
 		- Added a way to choose starting aspects.<br>
-		- Added the Time aspect`
+		- Added support for modals, though this is only used for the starting message right now<br>
+		- Added the Time aspect<br>
+		- Started work on actually implementing shit for the Time Aspect`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -45,9 +47,13 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
-	if(player.startAspects == 0 || player.startingState == -1) {
+	if(player.startingState == -1) {
 		clearInterval(interval);
 		StartModal();
+	} else if(player.startingState = 1) {
+		if(getBuyableAmount('T', 11) > 0)  {
+			gain = gain.times(buyableEffect('T', 11))
+		} 
 	}
 	return gain
 }
