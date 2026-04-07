@@ -317,6 +317,16 @@ var saveInterval = setInterval(function () {
 		save();
 }, 5000);
 
+function startState(startingState, reset = true) {
+	player = {
+		...reset ? getStartPlayer(): player,
+		timePlayed: player.timePlayed,
+		startingState: state,
+	}
+	save();
+	window.location.reload();
+}
+
 window.onbeforeunload = () => {
     if (player.autosave) {
         save();

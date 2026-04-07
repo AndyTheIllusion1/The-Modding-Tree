@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="css/other-tabs.css" />
 	<link rel="stylesheet" type="text/css" href="css/popup.css" />
 	<link rel="stylesheet" type="text/css" href="css/tree-node.css" />
+	<link rel="stylesheet" type="text/css" href="css/modal.css" />
 
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
 
@@ -17,6 +18,7 @@
 	<script src="js/technical/break_eternity.js"></script>
 	<script src="js/technical/layerSupport.js"></script>
 
+	<script src="js/modal.js"></script>
 	<script src="js/mod.js"></script>
 	<script src="js/technical/loader.js"></script>
 
@@ -122,6 +124,15 @@
 				<div v-for="particle,index in particles">
 					<particle :data="particle" :index="index" v-bind:key="'b' + particle.id"></particle>
 				</div>
+		</div>
+
+		<!-- Modals -->
+		<div v-if="modal.visible" class="modal">
+			<div>
+				<span v-if="modal.header"><h3 style="font-size:24px" v-html="modal.header"></h3><br/></span>
+				<span v-html="modal.body"></span><br/>
+				<button v-if="modal.exit" onclick="modal.hide()" v-html="modal.exit"></button>
+			</div>
 		</div>
 
 		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(tmp.gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" v-bind:class="{ fullWidth: player.navTab == 'none' || !tmp.other.splitScreen || !readData(layoutInfo.showTree), col: player.navTab != 'none', right: player.navTab != 'none', fast: true, tab: true}">

@@ -330,9 +330,17 @@ addLayer("T", {
     gainExp() { // Calculate the exponent on main currency from bonuses
         return new Decimal(1)
     },
-    hotkeys: [
-        {key: "p", description: "P: Reset for primal points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-    ],
+    buyables: {
+        11: {
+        cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id))},
+        display() { return "Blah" },
+        canAfford() { return player[this.layer].points.gte(this.cost()) },
+        buy() {
+            player[this.layer].points = player[this.layer].points.sub(this.cost())
+            setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            }
+        }
+    },
     layerShown(){
         if(player.tUnlocked[0] == 1) {
             return true

@@ -40,17 +40,23 @@ function canGenPoints(){
 
 // Calculate points/sec!
 function getPointGen() {
+
 	if(!canGenPoints())
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if(player.startAspects == 0 || player.startingState == -1) {
+		clearInterval(interval);
+		StartModal();
+	}
 	return gain
 }
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
 	startAspects: 0,
-	tUnlocked: [0,0,0,0,0,0,0,0,0,0,0,0]
+	tUnlocked: [0,0,0,0,0,0,0,0,0,0,0,0],
+	startingState: -1
 }}
 
 // Display extra things at the top of the page
