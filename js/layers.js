@@ -347,9 +347,10 @@ addLayer("T", {
         11: {
         cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id))},
         title() { return format(getBuyableAmount(this.layer, this.id), 0) +"<br/>Time Acceleration"},
-        display() { return "Time is accelerating point gain by " + format(tmp[this.layer].buyables[this.id].effect) + ".\n\ Cost:" + format(tmp[this.layer].buyables[this.id].cost) + " Time" },
+        display() { return `Time is accelerating point gain by ${format(getBuyableAmount(this.layer, this.id))}\n\ 
+        Cost: ${format(tmp[this.layer].buyables[this.id].cost)} Time` },
         canAfford() { return player[this.layer].points.gte(this.cost()) },
-        effect(x) { if(hasUpgrade(this.layer, this.id)) { 
+        effect(x) { if(hasUpgrade(this.layer, 11)) { 
             return new Decimal(2).times(getBuyableAmount(this.layer, this.id))
         } else {
             return new Decimal(1).add(getBuyableAmount(this.layer, this.id)) 
@@ -361,8 +362,16 @@ addLayer("T", {
             }
         },
         12: {
-            cost(x) {return new Decimal(100).pow(x || getBuyableAmount(this.layer, this.id))},
-            title() {return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>"}
+            cost(x) {return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id))},
+            title() {return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Compression"},
+            display() {return `Time is being compressed by ${format(tmp[this.layer].buyables[this.id].effect)} times.\n\ 
+                Cost: ${format(tmp[this.layer].buyables[this.id].cost)} Time Acceleration`},
+            canAfford() {return this.cost()},
+            effect(x) {},
+            buy() {
+                setBuyableAmount(this.layer, 11, getBuyableAmount(this.layer, 11).sub(this.cost()))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            }
         }
     },
     layerShown(){

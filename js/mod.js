@@ -13,11 +13,14 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0.1",
-	name: "the start",
+	num: "0.0.2",
+	name: "the stage",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v0.0.2</h3><br>
+		<h4>The one where time and space are implemented</h4>
+		- time bullshit<br>
 	<h3>v0.0.1</h3><br>
 		<h4>This is the start of me making shit</h4><br>
 		- Added a way to choose starting aspects.<br>
