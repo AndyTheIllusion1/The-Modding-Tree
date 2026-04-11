@@ -3,11 +3,13 @@ addNode("0", {
     color: '#b70d0e',
     position: 0,
     row: 0,
-    branches: ["T"],
     tooltip: "Unlocks the Time Aspect",
-    tooltipLocked: "You already unlocked time!!!",
     layerShown() {
-        return true
+        if(player.tUnlocked[0] == 1 || player.startAspects >= 4) {
+            return false
+        } else {
+            return true
+        }
     },
     canClick() {
         if(player.tUnlocked[0] == 1 || player.startAspects >= 4) {
@@ -335,10 +337,10 @@ addLayer("T", {
         cols: 6,
         11: {
             cost() {return new Decimal(1000)},
-            title() {return "Test"},
-            display() {return "Idk yet"},
+            title() {return "FASTER"},
             canAfford() {return player[this.layer].points.gte(this.cost())},
-            effect() {return new Decimal(1).times(getBuyableAmount(this.layer, 11))}
+            effect() {return new Decimal(1).times(getBuyableAmount(this.layer, 11))},
+            effectDescription() {return "Time Acceleration is doubled"}
         }
     },
     buyables: {
@@ -365,11 +367,11 @@ addLayer("T", {
             cost(x) {return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id))},
             title() {return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Compression"},
             display() {return `Time is being compressed by ${format(tmp[this.layer].buyables[this.id].effect)} times.\n\ 
-                Cost: ${format(tmp[this.layer].buyables[this.id].cost)} Time Acceleration`},
-            canAfford() {return this.cost()},
+                Cost: ${format(tmp[this.layer].buyables[this.id].cost)} Time.`},
+            canAfford() {return player[this.layer].points.gte(this.cost())},
             effect(x) {},
             buy() {
-                setBuyableAmount(this.layer, 11, getBuyableAmount(this.layer, 11).sub(this.cost()))
+                player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
             }
         }
@@ -381,4 +383,35 @@ addLayer("T", {
             return false
         }
     }
+})
+addLayer("S", {
+    Name: "Space",
+    symbol: "<img src='data/space.png' style='width:calc(90% - 2px);height:calc(90% - 2px);margin:5%'></img>", // This appears on the layer's node. Default is the id with the first letter capitalized
+    color: '#000000',
+    position: 1, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    row: 2,
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(1),
+    }},
+    requires: new Decimal(1), // Can be a function that takes requirement increases into account
+    resource: "Space", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: .5, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    layerShown(){
+        if(player.tUnlocked[1] == 1) {
+            return true
+        } else {
+            return false
+        }
+    },
 })
