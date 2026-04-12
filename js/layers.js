@@ -324,7 +324,7 @@ addLayer("T", {
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: .5, // Prestige currency exponent
+    exponent: .75, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         return mult
@@ -349,14 +349,21 @@ addLayer("T", {
         11: {
         cost(x) { return new Decimal(1.1).pow(x || getBuyableAmount(this.layer, this.id))},
         title() { return format(getBuyableAmount(this.layer, this.id), 0) +"<br/>Time Acceleration"},
-        display() { return `Time is accelerating point gain by ${format(getBuyableAmount(this.layer, this.id))}\n\ 
+        display() { return `Time is accelerating point gain by ${format(buyableEffect(this.layer,this.id))}\n\ 
         Cost: ${format(tmp[this.layer].buyables[this.id].cost)} Time` },
         canAfford() { return player[this.layer].points.gte(this.cost()) },
-        effect(x) { if(hasUpgrade(this.layer, 11)) { 
-            return new Decimal(2).times(getBuyableAmount(this.layer, this.id))
-        } else {
-            return new Decimal(1).add(getBuyableAmount(this.layer, this.id)) 
-        }
+        effect(x) { 
+            let buyT1 = new Decimal(2)
+            if (hasUpgrade(this.layer, 11)) {
+                buyT1 = buyT1.times(getBuyableAmount(this.layer, this.id))
+            } else {
+                buyT1 = new Decimal(1).add(getBuyableAmount(this.layer, this.id))
+            }
+            if (getBuyableAmount(this.layer, 12) > 0) {
+                let BetterT1 = new Decimal(1).add(buyableEffect(this.layer, 12)).times(getBuyableAmount(this.layer, this.id)) 
+                return BetterT1
+            }
+            return buyT1
         },
         buy() {
             player[this.layer].points = player[this.layer].points.sub(this.cost())
@@ -364,12 +371,12 @@ addLayer("T", {
             }
         },
         12: {
-            cost(x) {return new Decimal(10).pow(x || getBuyableAmount(this.layer, this.id))},
+            cost(x) {return new Decimal(100).times(x || getBuyableAmount(this.layer, this.id))},
             title() {return format(getBuyableAmount(this.layer, this.id), 0) + "<br/>Time Compression"},
-            display() {return `Time is being compressed by ${format(tmp[this.layer].buyables[this.id].effect)} times.\n\ 
+            display() {return `Time acceleration is being improved by ${format(tmp[this.layer].buyables[this.id].effect)} .\n\ 
                 Cost: ${format(tmp[this.layer].buyables[this.id].cost)} Time.`},
             canAfford() {return player[this.layer].points.gte(this.cost())},
-            effect(x) {},
+            effect(x) {return new Decimal(0.75).times(getBuyableAmount(this.layer, this.id))},
             buy() {
                 player[this.layer].points = player[this.layer].points.sub(this.cost())
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
